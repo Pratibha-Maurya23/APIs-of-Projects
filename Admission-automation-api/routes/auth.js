@@ -52,16 +52,7 @@ authRoutes.post("/login", async (req, res) => {
   }
   req.session.studentId = student._id;
 
-  res.json({
-   admissionNo: student.admissionNo,
-  name: student.name,
-  course: student.course,
-  email: student.email,
-  phone: student.phone,
-  address: student.address,
-  dob: student.dob,
-  year: student.year,
-  });
+  res.json(student);
 }catch(err) {
     console.error("LOGIN ERROR:", err);
     res.status(500).json({ message: "Server error" });
@@ -101,4 +92,5 @@ authRoutes.post("/logout", (req, res) => {
 });
 
 export default authRoutes;
+
 
