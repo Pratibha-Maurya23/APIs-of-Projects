@@ -54,8 +54,13 @@ authRoutes.post("/login", async (req, res) => {
 
   res.json({
    admissionNo: student.admissionNo,
-      name: student.name,
-      course: student.course,
+  name: student.name,
+  course: student.course,
+  email: student.email,
+  phone: student.phone,
+  address: student.address,
+  dob: student.dob,
+  year: student.year,
   });
 }catch(err) {
     console.error("LOGIN ERROR:", err);
@@ -96,3 +101,4 @@ authRoutes.post("/logout", (req, res) => {
 });
 
 export default authRoutes;
+
