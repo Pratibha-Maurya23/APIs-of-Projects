@@ -31,7 +31,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: false, 
-      maxAge: 1000 * 60 * 60, // 1 hour
+      sameSite: "lax",// 1 hour
     },
   })
 );
@@ -50,4 +50,5 @@ mongoose
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err.message);
   });
+
 
