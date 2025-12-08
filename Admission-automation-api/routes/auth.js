@@ -16,16 +16,12 @@ authRoutes.get("/me", requireAuth, async (req, res) => {
   const student = await Student.findById(req.session.studentId);
   res.json(student);
 });
-
-
-// Generate credentials
-const generateAdmissionNo = () =>
-  "ADM" + new Date().getFullYear() + Math.floor(1000 + Math.random() * 9000);
+  
 
 // ✅ ADMISSION
 authRoutes.post("/admission", async (req, res) => {
   try{
-  const admissionNo = generateAdmissionNo();
+  const admissionNo = "ADM" + new Date().getFullYear() + Math.floor(1000 + Math.random() * 9000);
   const plainPassword = Math.random().toString(36).slice(-8);
   const hashedPassword = await bcrypt.hash(plainPassword, 10);
 
@@ -201,6 +197,7 @@ authRoutes.get("/receipt/:studentId", async (req, res) => {
 
 
 export default authRoutes;
+
 
 
 
