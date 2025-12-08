@@ -60,6 +60,7 @@ authRoutes.post("/login", async (req, res) => {
 
   res.json({
   student: {
+    _id: student._id, 
     admissionNo: student.admissionNo,
     name: student.name,
     course: student.course,
@@ -147,6 +148,7 @@ authRoutes.post("/payment", async (req, res) => {
 });
 
 export default authRoutes;
+
 
 
 
