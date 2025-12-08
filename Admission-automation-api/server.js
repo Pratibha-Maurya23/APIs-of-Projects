@@ -10,17 +10,15 @@ dotenv.config();
 
 const app = express();
 
-/* ✅ CORS (required for cookies) */
 app.use(
   cors({
-    origin: "http://localhost:5173", // frontend port
+    origin: "http://localhost:5173", 
     credentials: true,
   })
 );
 
 app.use(express.json());
 
-/* ✅ SESSION CONFIG — FIXED */
 app.use(
   session({
     name: "admission.sid",
@@ -28,12 +26,12 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URL, // ✅ CORRECT
+      mongoUrl: process.env.MONGO_URL, 
     }),
     cookie: {
       httpOnly: true,
-      secure: false, // true in production
-      maxAge: 1000 * 60 * 60, // 1 hour
+      secure: false, 
+      sameSite: "lax",// 1 hour
     },
   })
 );
@@ -41,15 +39,16 @@ app.use(
 app.use(authRoutes);
 
 
-/* ✅ MONGODB CONNECT */
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
     console.log("✅ MongoDB Connected");
-    app.listen(process.env.PORT || 8000, () =>
-      console.log(`✅ Server running on http://localhost:${process.env.PORT || 8000}`)
+    app.listen(process.env.PORT || 8000, "0.0.0.0", () =>
+      console.log(`✅ Server running on {process.env.PORT || 8000}`)
     );
   })
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err.message);
   });
+
+

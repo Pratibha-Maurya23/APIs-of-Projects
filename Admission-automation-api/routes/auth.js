@@ -58,16 +58,10 @@ authRoutes.post("/login", async (req, res) => {
   req.session.studentId = student._id;
 
   res.json({
-  student: {
-    admissionNo: student.admissionNo,
-    name: student.name,
-    course: student.course,
-    branch: student.branch,
-    year: student.year,
-    payment: student.payment
-  }
-});
-
+   admissionNo: student.admissionNo,
+      name: student.name,
+      course: student.course,
+  });
 }catch(err) {
     console.error("LOGIN ERROR:", err);
     res.status(500).json({ message: "Server error" });
@@ -125,3 +119,5 @@ authRoutes.post("/payment", async (req, res) => {
 });
 
 export default authRoutes;
+
+
