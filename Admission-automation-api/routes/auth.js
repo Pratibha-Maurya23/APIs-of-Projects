@@ -26,11 +26,12 @@ authRoutes.post("/admission", async (req, res) => {
     ...req.body,
     admissionNo,
     password: hashedPassword,
+    payment: { status: "PENDING" },
   });
 
   await student.save();
 
-  res.json({ admissionNo, password: plainPassword });
+  res.json({ admissionNo, studentId: student._id});
 }catch (err) {
     console.error(err);
     res.status(500).json({ message: "Admission failed" });
@@ -125,5 +126,6 @@ authRoutes.post("/payment", async (req, res) => {
 });
 
 export default authRoutes;
+
 
 
