@@ -108,24 +108,46 @@ authRoutes.post("/logout", (req, res) => {
 });
 
 authRoutes.post("/payment", async (req, res) => {
-  const { admissionNo, amount, method } = req.body;
+  try {
+    const { studentId, amount, method, transactionId } = req.body;
 
-  await Student.updateOne(
-    { admissionNo },
-    {
-      payment: {
-        status: "PAID",
-        amount,
-        method,
-        paidAt: new Date(),
-      },
+    const student = await Student.findById(studentId);
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
     }
-  );
 
-  res.json({ message: "Payment successful ✅" });
+    // basic verification for demo
+    const EXPECTED_AMOUNT = 50000;
+    if (amount !== EXPECTED_AMOUNT) {
+      return res.status(400).json({ message: "Invalid amount" });
+    }
+
+    if (student.payment?.status === "PAID") {
+      return res.status(400).json({ message: "Already paid" });
+    }
+
+    student.payment = {
+      status: "PAID",
+      amount,
+      method,
+      transactionId: transactionId || `TXN-${Date.now()}`,
+      paidAt: new Date(),
+    };
+
+    await student.save();
+
+    res.json({
+      message: "Payment successful ✅",
+      studentId: student._id,
+    });
+  } catch (err) {
+    console.error("PAYMENT ERROR:", err);
+    res.status(500).json({ message: "Payment failed" });
+  }
 });
 
 export default authRoutes;
+
 
 
 
