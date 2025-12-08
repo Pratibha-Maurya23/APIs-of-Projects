@@ -60,14 +60,21 @@ authRoutes.post("/login", async (req, res) => {
 
   res.json({
   student: {
-    _id: student._id, 
+    _id: student._id,
     admissionNo: student.admissionNo,
     name: student.name,
+    email: student.email,       
+    phone: student.phone,        
+    address: student.address,  
+    dob: student.dob,            
     course: student.course,
     branch: student.branch,
     year: student.year,
-    payment: student.payment
+    qualifications: student.qualifications,            
+    payment: student.payment,
   }
+});
+
 });
 
 }catch(err) {
@@ -148,6 +155,7 @@ authRoutes.post("/payment", async (req, res) => {
 });
 
 export default authRoutes;
+
 
 
 
