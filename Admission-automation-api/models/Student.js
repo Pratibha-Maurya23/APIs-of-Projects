@@ -88,8 +88,20 @@ const studentSchema = new mongoose.Schema(
         type: String,
       },
     },
+    payment: {
+      status: {
+        type: String,
+        enum: ["PENDING", "PAID"],
+        default: "PENDING",
+      },
+      amount: Number,
+      method: String,
+      transactionId: String,
+      paidAt: Date,
+    },
   },
   { timestamps: true }
 );
 
 export default mongoose.model("Student", studentSchema);
+
