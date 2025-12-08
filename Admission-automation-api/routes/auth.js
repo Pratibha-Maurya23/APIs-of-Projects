@@ -3,6 +3,12 @@ import Student from "../models/Student.js";
 import bcrypt from "bcrypt";
 import requireAuth from "../middleware/auth.js"
 import PDFDocument from "pdfkit";
+import twilio from "twilio";
+
+const client = twilio(
+  process.env.TWILIO_SID,
+  process.env.TWILIO_AUTH
+);
 
 const authRoutes = express.Router();
 
@@ -32,7 +38,19 @@ authRoutes.post("/admission", async (req, res) => {
 
   await student.save();
 
-  res.json({ admissionNo, studentId: student._id});
+    // ✅ SEND SMS 
+  await client.messages.create({
+      body: `🎓 Admission Successful!
+
+Admission No: ${admissionNo}
+Password: ${plainPassword}
+
+Please complete payment to activate your dashboard.`,
+      from: process.env.TWILIO_PHONE,         
+      to: `+91${student.phone}`,
+    });
+
+  res.json({studentId: student._id,  message: "Admission successful",});
 }catch (err) {
     console.error(err);
     res.status(500).json({ message: "Admission failed" });
@@ -183,6 +201,7 @@ authRoutes.get("/receipt/:studentId", async (req, res) => {
 
 
 export default authRoutes;
+
 
 
 
