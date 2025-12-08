@@ -2,6 +2,7 @@ import express from "express";
 import Student from "../models/Student.js";
 import bcrypt from "bcrypt";
 import requireAuth from "../middleware/auth.js"
+import PDFDocument from "pdfkit";
 
 const authRoutes = express.Router();
 
@@ -154,7 +155,35 @@ authRoutes.post("/payment", async (req, res) => {
   }
 });
 
+authRoutes.get("/receipt/:studentId", async (req, res) => {
+  const student = await Student.findById(req.params.studentId);
+
+  if (!student || student.payment?.status !== "PAID") {
+    return res.status(404).json({ message: "Receipt not found" });
+  }
+
+  const doc = new PDFDocument();
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", "attachment; filename=receipt.pdf");
+
+  doc.pipe(res);
+
+  doc.fontSize(20).text("Admission Fee Receipt", { align: "center" });
+  doc.moveDown();
+
+  doc.text(`Name: ${student.name}`);
+  doc.text(`Admission No: ${student.admissionNo}`);
+  doc.text(`Course: ${student.course}`);
+  doc.text(`Amount Paid: ₹${student.payment.amount}`);
+  doc.text(`Transaction ID: ${student.payment.transactionId}`);
+  doc.text(`Date: ${student.payment.paidAt.toDateString()}`);
+
+  doc.end();
+});
+
+
 export default authRoutes;
+
 
 
 
