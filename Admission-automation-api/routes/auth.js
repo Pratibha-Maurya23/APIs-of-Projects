@@ -17,6 +17,7 @@ const generateAdmissionNo = () =>
 
 // ✅ ADMISSION
 authRoutes.post("/admission", async (req, res) => {
+  try{
   const admissionNo = generateAdmissionNo();
   const plainPassword = Math.random().toString(36).slice(-8);
   const hashedPassword = await bcrypt.hash(plainPassword, 10);
@@ -30,6 +31,10 @@ authRoutes.post("/admission", async (req, res) => {
   await student.save();
 
   res.json({ admissionNo, password: plainPassword });
+}catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Admission failed" });
+  }
 });
 
 // ✅ LOGIN
@@ -53,10 +58,16 @@ authRoutes.post("/login", async (req, res) => {
   req.session.studentId = student._id;
 
   res.json({
-   admissionNo: student.admissionNo,
-      name: student.name,
-      course: student.course,
-  });
+  student: {
+    admissionNo: student.admissionNo,
+    name: student.name,
+    course: student.course,
+    branch: student.branch,
+    year: student.year,
+    payment: student.payment
+  }
+});
+
 }catch(err) {
     console.error("LOGIN ERROR:", err);
     res.status(500).json({ message: "Server error" });
@@ -93,6 +104,24 @@ authRoutes.post("/logout", (req, res) => {
     res.clearCookie("admission.sid");
     res.json({ message: "Logged out" });
   });
+});
+
+authRoutes.post("/payment", async (req, res) => {
+  const { admissionNo, amount, method } = req.body;
+
+  await Student.updateOne(
+    { admissionNo },
+    {
+      payment: {
+        status: "PAID",
+        amount,
+        method,
+        paidAt: new Date(),
+      },
+    }
+  );
+
+  res.json({ message: "Payment successful ✅" });
 });
 
 export default authRoutes;
