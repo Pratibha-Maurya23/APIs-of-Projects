@@ -58,10 +58,16 @@ authRoutes.post("/login", async (req, res) => {
   req.session.studentId = student._id;
 
   res.json({
-   admissionNo: student.admissionNo,
-      name: student.name,
-      course: student.course,
-  });
+  student: {
+    admissionNo: student.admissionNo,
+    name: student.name,
+    course: student.course,
+    branch: student.branch,
+    year: student.year,
+    payment: student.payment
+  }
+});
+
 }catch(err) {
     console.error("LOGIN ERROR:", err);
     res.status(500).json({ message: "Server error" });
