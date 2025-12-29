@@ -24,8 +24,6 @@ app.use(express.urlencoded({extended:true}));
 
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
-app.use("/api/medicine", mediRouter);
-
 
 const PORT = config.port;
 const MONGO_URL = config.mongoURL;

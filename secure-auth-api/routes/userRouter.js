@@ -10,7 +10,7 @@ const userRouter = express.Router();
 userRouter.get(
   "/profile",
   auth,
-  roleCheck(["user", "pharmacist"]),
+  roleCheck(["user", "admin"]),
   (req, res) => {
     res.json({ message: "Access Granted ✅", user: req.user });
   }
