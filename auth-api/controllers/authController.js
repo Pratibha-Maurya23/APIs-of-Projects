@@ -48,3 +48,13 @@ exports.loginUser = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+// logout
+
+exports.logoutUser = (req,res)=>{
+  const {token} = req.body;
+  refreshTokens = refreshTokens.filter((t)=> t !== token);
+  if (!req.headers.authorization) {
+  return res.status(200).json({ message: "Already logged out" });
+}
+}

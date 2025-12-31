@@ -5,7 +5,6 @@ const userRouter = require("./routes/userRouter");
 const {config} = require("./config/config");
 const cors = require('cors');
 const cookieParser = require("cookie-parser");
-const mediRouter = require("./routes/medicineRouter");
 
 const app = express();
 

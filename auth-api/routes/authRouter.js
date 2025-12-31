@@ -1,13 +1,14 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const { refreshTokens } = require("../utils/tokenStore");
-const { registerUser, loginUser } = require("../controllers/authController");
+const { registerUser, loginUser, logoutUser } = require("../controllers/authController");
 
 const authRouter = express.Router();
 
 // 🔹 Register & Login routes
 authRouter.post("/register", registerUser);
 authRouter.post("/login", loginUser);
+authRouter.post("/logout", logoutUser);
 
 authRouter.post("/refresh-token", (req, res) => {
   try{
@@ -32,14 +33,6 @@ authRouter.post("/refresh-token", (req, res) => {
 } catch (err) {
     res.status(500).json({ message: err.message });
   }
-});
-
-authRouter.post("/logout",(req,res)=>{
-  const {token} = req.body;
-  refreshTokens = refreshTokens.filter((t)=> t !== token);
-  if (!req.headers.authorization) {
-  return res.status(200).json({ message: "Already logged out" });
-}
 });
 
 module.exports = {authRouter};
