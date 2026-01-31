@@ -41,24 +41,31 @@ authRoutes.post("/admission", async (req, res) => {
     });
 
     await student.save();
-
-    if (!TWILIO_SID || !TWILIO_AUTH) {
-      console.log("DEV MESSAGE:");
-      console.log(`Admission No: ${admissionNo}`);
-      console.log(`Password: ${plainPassword}`);
+     res.status(201).json({
+      studentId: student._id,
+      message: "Admission successful",
+    });
+    try {
+      if (!TWILIO_SID || !TWILIO_AUTH) {
+        console.log("DEV MESSAGE:");
+        console.log(`Admission No: ${admissionNo}`);
+        console.log(`Password: ${plainPassword}`);
+      } else {
+        await client.messages.create({
+          from: `whatsapp:${TWILIO_PHONE}`,
+          to: `whatsapp:+91${student.phone}`,
+          body: `🎓 Admission Successful!
+Admission No: ${admissionNo}
+Password: ${plainPassword}`,
+        });
+      }
+    } catch (msgErr) {
+      console.error("WhatsApp send failed:", msgErr.message);
     }
-      await client.messages.create({
-        from: `whatsapp:${TWILIO_PHONE}`,
-        to: `whatsapp:+91${student.phone}`,
-        body: `🎓 Admission Successful!
-             Admission No: ${admissionNo}
-             Password: ${plainPassword}`,
-      });
 
-    res.json({ studentId: student._id, message: "Admission successful" });
   } catch (err) {
     if (err.code === 11000) {
-      return res.status(400).json({
+      return res.status(409).json({
         message: "Student already exists with this Email or Aadhar",
       });
     }
@@ -66,6 +73,8 @@ authRoutes.post("/admission", async (req, res) => {
     res.status(500).json({ message: "Admission failed" });
   }
 });
+
+
 
 // ✅ LOGIN
 authRoutes.post("/login", async (req, res) => {
