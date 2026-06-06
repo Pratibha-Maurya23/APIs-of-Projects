@@ -9,8 +9,14 @@ const mediRouter = require("./routes/medicineRouter");
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5174",
+  "http://localhost:5173",
+  ...(process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(",").map(o => o.trim()) : [])
+];
+
 app.use(cors({
-  origin: ["http://localhost:5174","http://localhost:5173"],
+  origin: allowedOrigins,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
@@ -33,8 +39,8 @@ const MONGO_URL = config.mongoURL;
 mongoose.connect(MONGO_URL)
 .then(()=>{
   console.log("DB Connected ");
-app.listen(PORT,"0.0.0.0",()=>console.log(`Server running at ${PORT}`));
-
 })
 .catch((err)=>console.log(err));
+
+app.listen(PORT,"0.0.0.0",()=>console.log(`Server running at ${PORT}`));
 

@@ -6,12 +6,24 @@ import MongoStore from "connect-mongo";
 import authRoutes from "./routes/auth.js";
 import { config } from "./config/config.js";
 
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("⚠️ Unhandled Rejection:", reason.message || reason);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("⚠️ Uncaught Exception:", err.message || err);
+});
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  ...(process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(",").map(o => o.trim()) : [])
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173", 
+    origin: allowedOrigins,
     credentials: true,
   })
 );
@@ -46,12 +58,13 @@ mongoose
   .connect(MONGO_URL)
   .then(() => {
     console.log("✅ MongoDB Connected");
-    app.listen(PORT || 8080, "0.0.0.0", () =>
-      console.log(`✅ Server running on ${PORT || 8000}`)
-    );
   })
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err.message);
   });
+
+app.listen(PORT || 8080, "0.0.0.0", () =>
+  console.log(`✅ Server running on ${PORT || 8080}`)
+);
 
 

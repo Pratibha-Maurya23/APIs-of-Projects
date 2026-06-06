@@ -1,0 +1,49 @@
+services:
+  - type: web
+    name: admission-api
+    env: node
+    plan: free
+    rootDir: admission-api
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MONGO_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: TWILIO_SID
+        sync: false
+      - key: TWILIO_AUTH
+        sync: false
+      - key: TWILIO_PHONE
+        sync: false
+
+  - type: web
+    name: auth-api
+    env: node
+    plan: free
+    rootDir: auth-api
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MONGO_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: REFRESH_SECRET
+        generateValue: true
+
+  - type: web
+    name: healhub-api
+    env: node
+    plan: free
+    rootDir: healHub-api
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MONGO_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: REFRESH_SECRET
+        generateValue: true
