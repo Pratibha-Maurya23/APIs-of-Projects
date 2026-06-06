@@ -20,10 +20,11 @@ APIs-of-Projects/
 
 ---
 
-## 🛠️ Microservices Included
+## 🛠️ Microservices Included & Live Deployments
 
 ### 1. 🎓 Admission API (`/admission-api`)
 Automates the student registration process.
+* **Live Link**: [https://admission-api-auyi.onrender.com](https://admission-api-auyi.onrender.com)
 * **Technology stack**: Express, Mongoose (v9), PDFKit, Twilio.
 * **Key Features**:
   * Auto-generation of unique Admission numbers (`ADM2026xxxx`).
@@ -34,6 +35,7 @@ Automates the student registration process.
 
 ### 2. 🔐 Auth API (`/auth-api`)
 A core user authentication system.
+* **Live Link**: [https://auth-api-dkx3.onrender.com](https://auth-api-dkx3.onrender.com)
 * **Technology stack**: Express, Mongoose (v8), JSON Web Tokens (JWT), BcryptJS, Cookie-Parser.
 * **Key Features**:
   * Secure password hashing with salt.
@@ -42,6 +44,7 @@ A core user authentication system.
 
 ### 3. 🏥 HealHub API (`/healHub-api`)
 A medical utility backend managing products and user roles.
+* **Live Link**: [https://healhub-api.onrender.com](https://healhub-api.onrender.com)
 * **Technology stack**: Express, Mongoose, JWT.
 * **Key Features**:
   * Medicine inventory CRUD endpoints.
@@ -75,32 +78,6 @@ Go into the respective API folder, install dependencies, and run:
 cd admission-api # or auth-api, healHub-api
 npm install
 npm start
-```
-
----
-
-## 🔒 Environment Variables
-
-Ensure you configure the `.env` file in the folder of each API before running it:
-
-### `admission-api` `.env` Config:
-```env
-PORT=8000
-MONGO_URL=your_mongodb_connection_string
-SESSION_SECRET=supersecret123
-TWILIO_SID=your_twilio_sid
-TWILIO_AUTH=your_twilio_auth
-TWILIO_PHONE=your_twilio_phone_number
-FRONTEND_URL=http://localhost:5173
-```
-
-### `auth-api` / `healHub-api` `.env` Config:
-```env
-PORT=5000
-MONGO_URL=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-REFRESH_SECRET=your_refresh_secret
-FRONTEND_URL=http://localhost:5173,http://localhost:5174
 ```
 
 ---
